@@ -1,10 +1,12 @@
 // Copyright 2016 the project authors as listed in the AUTHORS file.
 // All rights reserved. Use of this source code is governed by the
 // license that can be found in the LICENSE file.
+"use strict";
 const http = require('https')
 const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
+const mqtt = require('mqtt');
 
 
 const consoleWrapper = { "log": function () {
@@ -14,14 +16,25 @@ const consoleWrapper = { "log": function () {
   }
 }}
 
+var mqttOptions;
+if (config.mqtt.serverUrl.indexOf('mqtts') > -1) {
+  mqttOptions = { key: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.key')),
+                  cert: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.cert')),
+                  ca: fs.readFileSync(path.join(__dirname, 'mqttclient', '/ca.cert')),
+                  checkServerIdentity: function() { return undefined }
+  }
+}
+const mqttClient = mqtt.connect(config.mqtt.serverUrl, mqttOptions);
+
+mqttClient.on('connect',function() {
+});
+
+
+mqttClient.on('message', function(topic, message) {
+});
+
 
 const requestHandler = (request, response) => {
-  // validate that it is an authentic request
-  if (request.url !== config.url) {
-    response.abort();
-  }
-
-  // setup default response
   var responseData =  { "version": "1.0",
                         "response": {
                           "outputSpeech": {
@@ -43,8 +56,19 @@ const requestHandler = (request, response) => {
 
     const intent = jsonObject.request.intent;
     if (config.intents[intent.name]) {
-      if (config.intents[intent.name][intent.slots.Device.value]) {
-
+      const key = config.intents[intent.name][intent.slots.Device.value];
+      if (key) {
+        const slots = intent.slots;
+        const topic = key.topic;
+        consoleWrapper.log('topic:' + topic);
+        var message = key.message;
+        if (message) {
+          message = eval('`' + message + '`');
+        } else {
+          message = '';
+        }
+        consoleWrapper.log('message:' + message);
+        mqttClient.publish(topic, message);
       } else {
         responseData.response.outputSpeech.text = "I could not find a device called " +
           jsonObject.request.intent.slots.Device.value;
@@ -56,15 +80,16 @@ const requestHandler = (request, response) => {
     response.end(JSON.stringify(responseData));
   });
 
+  if (request.url !== config.url) {
+    response.abort();
+  }
 }
 
-
 // start the server
-ssl_options = {
+const ssl_options = {
   key: fs.readFileSync(path.join(__dirname, 'key.pem')),
   cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
 }
-
 
 const server = http.createServer(ssl_options, requestHandler)
 server.listen(config.port, (err) => {
@@ -72,5 +97,5 @@ server.listen(config.port, (err) => {
     return console.log('Could not start server', err);
   }
 
-  console.log(`Server listening on ${config.port}`)
+  console.log(`Serverlistening on ${config.port}`)
 })
