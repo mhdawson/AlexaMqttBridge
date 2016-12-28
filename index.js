@@ -59,7 +59,7 @@ const requestHandler = (request, response) => {
       const key = config.intents[intent.name][intent.slots.Device.value];
       if (key) {
         const slots = intent.slots;
-        const topic = key.topic;
+        const topic = eval('`' + key.topic + '`');;
         consoleWrapper.log('topic:' + topic);
         var message = key.message;
         if (message) {
