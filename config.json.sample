@@ -1,0 +1,18 @@
+{
+  "logging": false,
+  "port": 5000,
+  "url": "/alexa?XXXXXXXXXXXXXXXXXX",
+  "intents": { "TurnOn": { "power monitor": { "topic": "alexa", "message": "received ${slots.Device.value} on" } },
+               "TurnOff": { "power monitor": { "topic": "alexa", "message": "received ${slots.Device.value} off" }  },
+               "Tune": { "TV": { "topic": "home/harmony/hubs/harmony-hub/devices/rogers-dvr/command",
+                                 "message": "${slots.Channel.value.split('').join(' ')}" } },
+               "VolumeUp": { "TV": { "topic": "home/harmony/hubs/harmony-hub/devices/samsung-tv/command",
+                                 "message": "volume-up:${slots.Repeat.value}" } },
+               "VolumeDown": { "TV": { "topic": "home/harmony/hubs/harmony-hub/devices/samsung-tv/command",
+                                 "message": "volume-down:${slots.Repeat.value}" } },
+               "Mute": { "TV": { "topic": "home/harmony/hubs/harmony-hub/devices/samsung-tv/command",
+                                 "message": "mute" } }
+             },
+  "mqtt": { "serverUrl": "mqtt:10.1.1.186:1883"
+          }
+}
