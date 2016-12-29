@@ -55,20 +55,25 @@ const requestHandler = (request, response) => {
     consoleWrapper.log(jsonObject.request.intent);
 
     const intent = jsonObject.request.intent;
-    if (config.intents[intent.name]) {
+    if (intent && intent.name && config.intents[intent.name]) {
       const key = config.intents[intent.name][intent.slots.Device.value];
       if (key) {
         const slots = intent.slots;
-        const topic = eval('`' + key.topic + '`');;
-        consoleWrapper.log('topic:' + topic);
-        var message = key.message;
-        if (message) {
-          message = eval('`' + message + '`');
-        } else {
-          message = '';
+        try {
+          const topic = eval('`' + key.topic + '`');;
+          consoleWrapper.log('topic:' + topic);
+          var message = key.message;
+          if (message) {
+            message = eval('`' + message + '`');
+          } else {
+            message = '';
+          }
+          consoleWrapper.log('message:' + message);
+          mqttClient.publish(topic, message);
+        } catch (e) {
+          consoleWrapper.log(e);
+          responseData.response.outputSpeech.text = "I could not process your request";
         }
-        consoleWrapper.log('message:' + message);
-        mqttClient.publish(topic, message);
       } else {
         responseData.response.outputSpeech.text = "I could not find a device called " +
           jsonObject.request.intent.slots.Device.value;
