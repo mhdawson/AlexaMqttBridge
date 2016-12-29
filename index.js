@@ -60,20 +60,26 @@ const requestHandler = (request, response) => {
 
     const intent = jsonObject.request.intent;
     if (intent && intent.name && config.intents[intent.name]) {
-      const key = config.intents[intent.name][intent.slots.Device.value];
+      var key = config.intents[intent.name][intent.slots.Device.value];
+      consoleWrapper.log(key);
       if (key) {
-        const slots = intent.slots;
+        if (Object.prototype.toString.call(key) !== '[object Array]' ) {
+          key = [ key ];
+        }
         try {
-          const topic = eval('`' + key.topic + '`');;
-          consoleWrapper.log('topic:' + topic);
-          var message = key.message;
-          if (message) {
-            message = eval('`' + message + '`');
-          } else {
-            message = '';
+          const slots = intent.slots;
+          for (let i = 0; i < key.length; i++) {
+            const topic = eval('`' + key[i].topic + '`');;
+            consoleWrapper.log('topic:' + topic);
+            var message = key[i].message;
+            if (message) {
+              message = eval('`' + message + '`');
+            } else {
+              message = '';
+            }
+            consoleWrapper.log('message:' + message);
+            mqttClient.publish(topic, message);
           }
-          consoleWrapper.log('message:' + message);
-          mqttClient.publish(topic, message);
         } catch (e) {
           consoleWrapper.log(e);
           responseData.response.outputSpeech.text = "I could not process your request";
