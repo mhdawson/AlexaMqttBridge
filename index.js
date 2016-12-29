@@ -50,6 +50,10 @@ const requestHandler = (request, response) => {
   });
 
   request.on('end', function(chunk) {
+    if (request.url !== config.url) {
+      return;
+    }
+
     const jsonObject = JSON.parse(requestData);
     consoleWrapper.log(jsonObject);
     consoleWrapper.log(jsonObject.request.intent);
@@ -86,7 +90,8 @@ const requestHandler = (request, response) => {
   });
 
   if (request.url !== config.url) {
-    response.abort();
+    consoleWrapper.log(new Date() + ': invalid request received');
+    response.end();
   }
 }
 
