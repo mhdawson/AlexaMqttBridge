@@ -82,13 +82,17 @@ const requestHandler = (request, response) => {
 
             // if there is a response topic setup to receive a response
             let listener;
+            let timer;
             if (key[i].responseTopic) {
                listener = function(topic, message) {
                  if (topic === key[i].responseTopic) {
                    responseData.response.outputSpeech.text = message.toString();
                    response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
                    response.end(JSON.stringify(responseData));
-                   mqttClient.rmeoveListener(listener);
+                   mqttClient.removeListener('message', listener);
+                   if (timer) {
+                     clearTimeout(timer);
+                   }
                  }
                };
                mqttClient.on('message', listener);
@@ -105,8 +109,8 @@ const requestHandler = (request, response) => {
               if(key[i].responseTimeout) {
                 timeout = key[i].responseTimeout;
               }
-              setTimeout(function() {
-                mqttClient.rmeoveListener(listener);
+              timer = setTimeout(function() {
+                mqttClient.removeListener(listener);
                 responseData.response.outputSpeech.text = 'Timed out waiting for response';
                 response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
                 response.end(JSON.stringify(responseData));
