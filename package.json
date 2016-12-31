@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node lib/server.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "mqtt": "~1.6.3"
