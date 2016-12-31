@@ -102,7 +102,7 @@ const requestHandler = (request, response) => {
             // send out the message
             mqttClient.publish(topic, message);
 
-            // setup timeout incase we don't get a response if on is expected
+            // setup timeout in case we don't get a response if on is expected
             if (key[i].responseTopic) {
               respondImmediately = false;
               let timeout = 5000;
@@ -110,7 +110,7 @@ const requestHandler = (request, response) => {
                 timeout = key[i].responseTimeout;
               }
               timer = setTimeout(function() {
-                mqttClient.removeListener(listener);
+                mqttClient.removeListener('message', listener);
                 responseData.response.outputSpeech.text = 'Timed out waiting for response';
                 response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
                 response.end(JSON.stringify(responseData));
