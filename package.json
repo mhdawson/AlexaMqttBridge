@@ -1,0 +1,38 @@
+{
+  "name": "AlexaMqttBridge",
+  "version": "0.0.1",
+  "description": "bridge from Alexa to mqtt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node lib/server.js"
+  },
+  "dependencies": {
+    "mqtt": "~1.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhdawson/AlexaMqttBridge.git"
+  },
+  "keywords": [
+    "iot",
+    "mqtt",
+    "dashboard",
+    "sensor",
+    "alarm",
+    "Alexa",
+    "Amazon"
+  ],
+  "author": "Michael Dawson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mhdawson/AlexaMqttBridge/issues"
+  },
+  "homepage": "https://github.com/mhdawson/AlexaMqttBridge#readme",
+  "contributors": [
+    {
+      "name": "Michael Dawson",
+      "email": "mdawson@devrus.com"
+    }
+  ]
+}
