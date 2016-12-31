@@ -35,6 +35,7 @@ mqttClient.on('message', function(topic, message) {
 
 
 const requestHandler = (request, response) => {
+  var respondImmediately = true;
   var responseData =  { "version": "1.0",
                         "response": {
                           "outputSpeech": {
@@ -78,7 +79,39 @@ const requestHandler = (request, response) => {
               message = '';
             }
             consoleWrapper.log('message:' + message);
+
+            // if there is a response topic setup to receive a response
+            let listener;
+            if (key[i].responseTopic) {
+               listener = function(topic, message) {
+                 if (topic === key[i].responseTopic) {
+                   responseData.response.outputSpeech.text = message.toString();
+                   response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
+                   response.end(JSON.stringify(responseData));
+                   mqttClient.rmeoveListener(listener);
+                 }
+               };
+               mqttClient.on('message', listener);
+               mqttClient.subscribe(key[i].responseTopic);
+            }
+
+            // send out the message
             mqttClient.publish(topic, message);
+
+            // setup timeout incase we don't get a response if on is expected
+            if (key[i].responseTopic) {
+              respondImmediately = false;
+              let timeout = 5000;
+              if(key[i].responseTimeout) {
+                timeout = key[i].responseTimeout;
+              }
+              setTimeout(function() {
+                mqttClient.rmeoveListener(listener);
+                responseData.response.outputSpeech.text = 'Timed out waiting for response';
+                response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
+                response.end(JSON.stringify(responseData));
+              }, timeout);
+            }
           }
         } catch (e) {
           consoleWrapper.log(e);
@@ -91,8 +124,10 @@ const requestHandler = (request, response) => {
     } else {
       responseData.response.outputSpeech.text = "Not sure what you wanted me to do";
     }
-    response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
-    response.end(JSON.stringify(responseData));
+    if (respondImmediately) {
+      response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
+      response.end(JSON.stringify(responseData));
+    }
   });
 
   if (request.url !== config.url) {
