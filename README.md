@@ -254,6 +254,12 @@ The bridge configuration includes the following main fields:
   and message field are javascript templates that will be evaluated in a context
   where the variable 'slots' can be used within the template.  The slots
   variable will have a field for each of the slots configured for the itntent.
+  In addition to the topic and message field there can be an optional field
+  called responseTopic.  If this field exists then the bridge will wait on
+  that topic for the resonse for Alexa to say in response to the command. If
+  there is a responseTopic, you can also optionally include the
+  responseTimeout field to change the timeout in milliseconds after which the
+  bridge will stop waiting for a response (the default is 5000ms).
 
 The folowing is an example matching the skill configuration shown above:
 
