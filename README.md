@@ -238,7 +238,9 @@ The bridge configuration includes the following main fields:
 * **port** - ort on which the bridge will listen.
 * **url** - url that we expect when a request is received.  Should be unique
   and match that configured for the custom skill.  For example :
-  ```alexa?auvy612312wdxcfr21123```.
+  ```
+  alexa?auvy612312wdxcfr21123
+  ```
 * **mqttServerUrl** - url of the mqtt server to connect to.  This can
   either start with tcp:// or mqtts://. If it starts with mqtts://
   there must be a subdirectory in the lib directory called mqttclient
