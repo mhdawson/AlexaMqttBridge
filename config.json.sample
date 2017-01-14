@@ -40,7 +40,10 @@
                "Stop": { "TV": { "topic": "house/dlnaplay/control",
                                  "message": "stop" } },
                "Seek": { "TV": { "topic": "house/dlnaplay/control",
-                                 "message": "seek:${slots.Time.value}" } }
+                                 "message": "seek:${slots.Time.value}" } },
+               "WhatsNew": { "TV": { "topic": "house/dlnaplay/control",
+                                     "message": "whatsnew",
+                                     "responseTopic": "house/dlnaplay/response" } }
              },
   "mqtt": { "serverUrl": "mqtt:10.1.1.186:1883"
           }
