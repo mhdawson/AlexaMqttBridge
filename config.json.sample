@@ -6,7 +6,8 @@
                            "alarm": { "topic": "house/alarm/control", "message": "arm" },
                            "living room right": { "topic": "house/x10", "message": "A,1,1" },
                            "living room left": { "topic": "house/x10", "message": "A,2,1" },
-                           "dining room": { "topic": "house/x10", "message": "A,5,1" }
+                           "dining room": { "topic": "house/x10", "message": "A,5,1" },
+                           "office light": { "topic": "home/2272/200", "message": "0F0FFFFF0101" }
                          },
                "TurnOff": { "power monitor": { "topic": "alexa", "message": "received ${slots.Device.value} off" },
                             "living room lights": [ { "topic": "house/x10", "message": "A,5,0" },
@@ -14,7 +15,8 @@
                                                     { "topic": "house/x10", "message": "A,2,0:2000" } ],
                             "living room right": { "topic": "house/x10", "message": "A,1,0" },
                             "living room left": { "topic": "house/x10", "message": "A,2,0" },
-                            "dining room": { "topic": "house/x10", "message": "A,5,0" }
+                            "dining room": { "topic": "house/x10", "message": "A,5,0" },
+                            "office light": { "topic": "home/2272/200", "message": "0F0FFFFF0110" }
                           },
                "Tune": { "TV": { "topic": "home/harmony/hubs/harmony-hub/devices/rogers-dvr/command",
                                  "message": "${slots.Channel.value.split('').join(' ')}" } },
