@@ -7,7 +7,10 @@
                            "living room right": { "topic": "house/x10", "message": "A,1,1" },
                            "living room left": { "topic": "house/x10", "message": "A,2,1" },
                            "dining room": { "topic": "house/x10", "message": "A,5,1" },
-                           "office light": { "topic": "home/2272/200", "message": "0F0FFFFF0101" }
+                           "office light": { "topic": "home/2272/200", "message": "0F0FFFFF0101" },
+                           "fan high": { "topic": "house/fan", "message": "1000,high" },
+                           "fan med": { "topic": "house/fan", "message": "1000,med" },
+                           "fan low": { "topic": "house/fan", "message": "1000,low" }
                          },
                "TurnOff": { "power monitor": { "topic": "alexa", "message": "received ${slots.Device.value} off" },
                             "living room lights": [ { "topic": "house/x10", "message": "A,5,0" },
@@ -16,7 +19,8 @@
                             "living room right": { "topic": "house/x10", "message": "A,1,0" },
                             "living room left": { "topic": "house/x10", "message": "A,2,0" },
                             "dining room": { "topic": "house/x10", "message": "A,5,0" },
-                            "office light": { "topic": "home/2272/200", "message": "0F0FFFFF0110" }
+                            "office light": { "topic": "home/2272/200", "message": "0F0FFFFF0110" },
+                            "fan": { "topic": "house/fan", "message": "1000,off" }
                           },
                "Tune": { "TV": { "topic": "home/harmony/hubs/harmony-hub/devices/rogers-dvr/command",
                                  "message": "${slots.Channel.value.split('').join(' ')}" } },
