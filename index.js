@@ -60,8 +60,10 @@ const requestHandler = (request, response) => {
     consoleWrapper.log(jsonObject.request.intent);
 
     const intent = jsonObject.request.intent;
-    if (intent && intent.name && config.intents[intent.name]) {
-      var key = config.intents[intent.name][intent.slots.Device.value];
+    if (intent.slots.Device.value === undefined) {
+      responseData.response.outputSpeech.text = "Device was undefined";
+    } else if (intent && intent.name && config.intents[intent.name]) {
+      var key = config.intents[intent.name][intent.slots.Device.value.toString().toLowerCase()];
       consoleWrapper.log(key);
       if (key) {
         if (Object.prototype.toString.call(key) !== '[object Array]' ) {
@@ -124,6 +126,7 @@ const requestHandler = (request, response) => {
       } else {
         responseData.response.outputSpeech.text = "I could not find a device called " +
           jsonObject.request.intent.slots.Device.value;
+        consoleWrapper.log("Could not find device:" + jsonObject.request.intent.slots.Device.value);
       }
     } else {
       responseData.response.outputSpeech.text = "Not sure what you wanted me to do";
