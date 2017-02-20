@@ -63,8 +63,12 @@ const requestHandler = (request, response) => {
     if (intent.slots.Device.value === undefined) {
       responseData.response.outputSpeech.text = "Device was undefined";
     } else if (intent && intent.name && config.intents[intent.name]) {
-      var key = config.intents[intent.name]
-                  [intent.slots.Device.value.toString().toLowerCase().replace("'", "")];
+      const intentObject = config.intents[intent.name];
+      var device = intent.slots.Device.value.toString().toLowerCase().replace("'", "");
+      var key = intentObject[device];
+      if (key === undefined) {
+        key = intentObject['default'];
+      }
       consoleWrapper.log(key);
       if (key) {
         if (Object.prototype.toString.call(key) !== '[object Array]' ) {
