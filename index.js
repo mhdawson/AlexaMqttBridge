@@ -41,9 +41,14 @@ const requestHandler = (request, response) => {
                           "outputSpeech": {
                             "type": "PlainText",
                             "text": "ok"
-                          }
+                          },
+                          "shouldEndSession": true
                         }
                       };
+
+  if (config.terminateSessionDefault  === false ) {
+    responseData.response.shouldEndSession = false;
+  }
 
   var requestData = '';
   request.on('data', function(chunk) {
@@ -56,6 +61,23 @@ const requestHandler = (request, response) => {
     }
 
     const jsonObject = JSON.parse(requestData);
+
+    // check what kind of request it was
+    if (jsonObject.request.type === 'LaunchRequest') {
+      responseData.response.outputSpeech.text = "Hi, I'm Michael";
+      response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
+      response.end(JSON.stringify(responseData));
+      return;
+    }
+
+    // check what kind of request it was
+    if (jsonObject.request.type === 'SessionEndedRequest') {
+      response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
+      response.end(JSON.stringify(responseData));
+      return;
+    }
+
+
     consoleWrapper.log(jsonObject);
     consoleWrapper.log(jsonObject.request.intent);
 
