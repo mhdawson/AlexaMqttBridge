@@ -62,31 +62,38 @@ const requestHandler = (request, response) => {
 
     const jsonObject = JSON.parse(requestData);
 
-    // check what kind of request it was
+    // Handle Launch request
     if (jsonObject.request.type === 'LaunchRequest') {
       responseData.response.outputSpeech.text = "Hi, I'm Michael";
+      responseData.response.shouldEndSession = false;
       response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
       response.end(JSON.stringify(responseData));
       return;
     }
 
-    // check what kind of request it was
+    // Handle SessionEndedRequest
     if (jsonObject.request.type === 'SessionEndedRequest') {
       response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
       response.end(JSON.stringify(responseData));
       return;
     }
 
-
+    // Handle IntentRequest
     consoleWrapper.log(jsonObject);
     consoleWrapper.log(jsonObject.request.intent);
 
     const intent = jsonObject.request.intent;
-    if (intent.slots.Device.value === undefined) {
-      responseData.response.outputSpeech.text = "Device was undefined";
-    } else if (intent && intent.name && config.intents[intent.name]) {
+
+    // get the device associated with the request some intents do not
+    // have a device slot at all.  In this case we expect there to be
+    // a default device entry
+    var device = 'default';
+    if (intent.slots.Device) {
+      device = intent.slots.Device.value.toString().toLowerCase().replace("'", "");;
+    }
+
+    if (intent && intent.name && config.intents[intent.name]) {
       const intentObject = config.intents[intent.name];
-      var device = intent.slots.Device.value.toString().toLowerCase().replace("'", "");
       var key = intentObject[device];
       if (key === undefined) {
         key = intentObject['default'];
