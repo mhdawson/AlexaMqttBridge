@@ -1,6 +1,7 @@
 {
   "logging": false,
   "port": 5000,
+  "terminateSessionDefault": true,
   "url": "/alexa?XXXXXXXXXXXXXXXXXX",
   "intents": { "TurnOn": { "power monitor": { "topic": "alexa", "message": "received ${slots.Device.value} on" },
                            "alarm": { "topic": "house/alarm/control", "message": "arm" },
@@ -54,7 +55,14 @@
                                  "message": "seek:${slots.Time.value}" } },
                "WhatsNew": { "tv": { "topic": "house/dlnaplay/control",
                                      "message": "whatsnew",
-                                     "responseTopic": "house/dlnaplay/response" } }
+                                     "responseTopic": "house/dlnaplay/response" } },
+               "Recipe": { "default": { "topic": "pdfViewer/request",
+                                        "message": "${slots.RecipeNames.value}" } },
+               "Call": { "default": { "topic": "sipBroker/request",
+                                      "message": "${slots.Device.value.toLowerCase().replace(\" \", \"\").replace(\"'\", \"\")}",
+                                      "responseTopic": "sipBroker/response" },
+                         "cancel": { "topic": "sipBroker/cancel",
+                                     "message": "cancel" } }
              },
   "mqtt": { "serverUrl": "mqtt:10.1.1.186:1883"
           }
