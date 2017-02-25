@@ -88,7 +88,7 @@ const requestHandler = (request, response) => {
     // have a device slot at all.  In this case we expect there to be
     // a default device entry
     var device = 'default';
-    if (intent.slots.Device) {
+    if ((intent.slots.Device) && (intent.slots.Device.value)) {
       device = intent.slots.Device.value.toString().toLowerCase().replace("'", "");;
     }
 
