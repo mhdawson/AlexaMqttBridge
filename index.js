@@ -89,7 +89,7 @@ const requestHandler = (request, response) => {
     // a default device entry
     var device = 'default';
     if ((intent.slots.Device) && (intent.slots.Device.value)) {
-      device = intent.slots.Device.value.toString().toLowerCase().replace("'", "");;
+      device = intent.slots.Device.value.toString().toLowerCase().replace("'", "").replace(" ", "");
     }
 
     if (intent && intent.name && config.intents[intent.name]) {
