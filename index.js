@@ -26,6 +26,17 @@ if (config.mqtt.serverUrl.indexOf('mqtts') > -1) {
 }
 const mqttClient = mqtt.connect(config.mqtt.serverUrl, mqttOptions);
 
+var mqttOptionsExternal;
+if (config.mqttExternal.serverUrl.indexOf('mqtts') > -1) {
+  mqttOptionsExternal = { key: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.key')),
+                          cert: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.cert')),
+                          ca: fs.readFileSync(path.join(__dirname, 'mqttclient', '/ca.cert')),
+                          checkServerIdentity: function() { return undefined }
+  }
+}
+const mqttClientExternal = mqtt.connect(config.mqttExternal.serverUrl, mqttOptionsExternal);
+
+
 mqttClient.on('connect',function() {
 });
 
@@ -90,6 +101,8 @@ const requestHandler = (request, response) => {
     var device = 'default';
     if ((intent.slots.Device) && (intent.slots.Device.value)) {
       device = intent.slots.Device.value.toString().toLowerCase().replace(/'/g,'').replace(/ /g,'');
+    } else if ((intent.slots.SnapTarget) && (intent.slots.SnapTarget.value)) {
+      device = intent.slots.SnapTarget.value.toString().toLowerCase().replace(/'/g,'').replace(/ /g,'');
     }
 
     if (intent && intent.name && config.intents[intent.name]) {
@@ -107,6 +120,10 @@ const requestHandler = (request, response) => {
           const slots = intent.slots;
           for (let i = 0; i < key.length; i++) {
             const topic = eval('`' + key[i].topic + '`');;
+            let mqttClientHandle = mqttClient;
+            if (key[i].server === 'external') {
+              mqttClientHandle = mqttClientExternal;  
+            }
             consoleWrapper.log('topic:' + topic);
             var message = key[i].message;
             if (message) {
@@ -125,18 +142,19 @@ const requestHandler = (request, response) => {
                    responseData.response.outputSpeech.text = message.toString();
                    response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
                    response.end(JSON.stringify(responseData));
-                   mqttClient.removeListener('message', listener);
+                   mqttClientHandle.removeListener('message', listener);
                    if (timer) {
                      clearTimeout(timer);
                    }
                  }
                };
-               mqttClient.on('message', listener);
-               mqttClient.subscribe(key[i].responseTopic);
+
+               mqttClientHandle.on('message', listener);
+               mqttClientHandle.subscribe(key[i].responseTopic);
             }
 
             // send out the message
-            mqttClient.publish(topic, message);
+            mqttClientHandle.publish(topic, message);
 
             // setup timeout in case we don't get a response if on is expected
             if (key[i].responseTopic) {
@@ -146,7 +164,7 @@ const requestHandler = (request, response) => {
                 timeout = key[i].responseTimeout;
               }
               timer = setTimeout(function() {
-                mqttClient.removeListener('message', listener);
+                mqttClientHandle.removeListener('message', listener);
                 responseData.response.outputSpeech.text = 'Timed out waiting for response';
                 response.writeHead(200, {'Content-Type': 'application/json;charset=UTF-8'});
                 response.end(JSON.stringify(responseData));
@@ -158,9 +176,8 @@ const requestHandler = (request, response) => {
           responseData.response.outputSpeech.text = "I could not process your request";
         }
       } else {
-        responseData.response.outputSpeech.text = "I could not find a device called " +
-          jsonObject.request.intent.slots.Device.value;
-        consoleWrapper.log("Could not find device:" + jsonObject.request.intent.slots.Device.value);
+        responseData.response.outputSpeech.text = "I could not find a device called " + device;
+        consoleWrapper.log("Could not find device:" + device);
       }
     } else {
       responseData.response.outputSpeech.text = "Not sure what you wanted me to do";
