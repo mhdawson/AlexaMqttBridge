@@ -18,7 +18,8 @@
                            "tv1": { "topic": "house/livtv", "message": "tv" },
                            "media1": { "topic": "house/livtv", "message": "mediaplayer" },
                            "video1": { "topic": "house/livtv", "message": "mediaplayer" },
-                           "andrew": { "topic": "home/2272", "message": "1FFFFFFF0010" }
+                           "andrew": { "topic": "home/2272", "message": "1FFFFFFF0010" },
+                           "ac": { "topic": "home/2272", "message": "0F0FFFFF0110" }
                          },
                "TurnOff": { "powermonitor": { "topic": "alexa", "message": "received ${slots.Device.value} off" },
                             "livingroomlights": [ { "topic": "house/x10", "message": "A,5,0" },
@@ -32,7 +33,8 @@
                             "tv1": { "topic": "house/livtv", "message": "off" },
                             "media1": { "topic": "house/livtv", "message": "off" },
                             "video1": { "topic": "house/livtv", "message": "off" },
-                            "andrew": { "topic": "home/2272", "message": "1FFFFFFF0001" }
+                            "andrew": { "topic": "home/2272", "message": "1FFFFFFF0001" },
+                            "ac": { "topic": "home/2272", "message": "0F0FFFFF0101" }
                           },
                "Tune": { "tv": { "topic": "home/harmony/hubs/harmony-hub/devices/rogers-dvr/command",
                                  "message": "${slots.Channel.value.split('').join(' ')}" } },
