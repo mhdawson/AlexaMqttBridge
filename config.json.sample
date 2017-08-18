@@ -19,7 +19,8 @@
                            "media1": { "topic": "house/livtv", "message": "mediaplayer" },
                            "video1": { "topic": "house/livtv", "message": "mediaplayer" },
                            "andrew": { "topic": "home/2272", "message": "1FFFFFFF0010" },
-                           "ac": { "topic": "home/2272", "message": "0F0FFFFF0110" }
+                           "ac": { "topic": "home/2272", "message": "0F0FFFFF0110" },
+                           "bedroom": { "topic": "house/led", "message": "range 0 59 255 255 255" }
                          },
                "TurnOff": { "powermonitor": { "topic": "alexa", "message": "received ${slots.Device.value} off" },
                             "livingroomlights": [ { "topic": "house/x10", "message": "A,5,0" },
@@ -34,7 +35,8 @@
                             "media1": { "topic": "house/livtv", "message": "off" },
                             "video1": { "topic": "house/livtv", "message": "off" },
                             "andrew": { "topic": "home/2272", "message": "1FFFFFFF0001" },
-                            "ac": { "topic": "home/2272", "message": "0F0FFFFF0101" }
+                            "ac": { "topic": "home/2272", "message": "0F0FFFFF0101" },
+                            "bedroom": { "topic": "house/led", "message": "off" }
                           },
                "Tune": { "tv": { "topic": "home/harmony/hubs/harmony-hub/devices/rogers-dvr/command",
                                  "message": "${slots.Channel.value.split('').join(' ')}" } },
@@ -80,7 +82,9 @@
                                      "responseTopic": "burn/response" },
                         "michael": { "topic": "burn/response",
                                      "message": "Why would I do that ?",
-                                     "responseTopic": "burn/response" } },
+                                     "responseTopic": "burn/response" },
+                        "bedroom": { "topic": "house/led",
+                                     "message": "fire 75 35 70 0 59" } },
                "Recipe": { "default": { "topic": "pdfViewer/request",
                                         "message": "${slots.RecipeNames.value}" } },
                "Call": { "default": { "topic": "sipBroker/request",
