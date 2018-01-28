@@ -45,7 +45,7 @@ the url at which this module will be running/responding.  For example:
 https://alexa.myhost.com/alexa?XXXXXXXXX
 ```
 
-Were XXXXXX is a secret used to ensure we only accept requests from Alexa.
+Where XXXXXX is a secret used to ensure we only accept requests from Alexa.
 The portion after ```https://alexa.myhost.com/``` must match the value
 you configure for url in config.json as described below.
 
@@ -235,7 +235,7 @@ and XXX is the utterance.
 The bridge configuration includes the following main fields:
 
 * **logging** - if true enables logging.
-* **port** - ort on which the bridge will listen.
+* **port** - port on which the bridge will listen.
 * **url** - url that we expect when a request is received.  Should be unique
   and match that configured for the custom skill.  For example :
   ```
