@@ -26,6 +26,16 @@ npm install https://github.com/mhdawson/AlexaMqttBridge.git
 then copy config.json.sample to config.json and fill
 in the configuration as required.
 
+In addition, the bridge requires a private key and certificate which is used to support SSL.
+The certificate must be issued by a recognized issuer in order
+for the Alexa skill to be able to connect to it.  Currently these files must be in the
+same file as which `index.js` is located.  These two files must be present:
+
+* `key.pm` - private key associated with the certificate
+* `cert.pem` - the certificate.
+
+I use [Let's Encrypt'](https://letsencrypt.org/) to generate a free certificate.
+
 ## Configuration
 
 You will need to create a custom skill and a matching config.json
