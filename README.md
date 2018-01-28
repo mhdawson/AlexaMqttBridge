@@ -34,7 +34,7 @@ same file as which `index.js` is located.  These two files must be present:
 * `key.pm` - private key associated with the certificate
 * `cert.pem` - the certificate.
 
-I use [Let's Encrypt'](https://letsencrypt.org/) to generate a free certificate.
+I use [Let's Encrypt](https://letsencrypt.org/) to generate a free certificate.
 
 ## Configuration
 
