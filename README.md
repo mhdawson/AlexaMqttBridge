@@ -31,8 +31,8 @@ The certificate must be issued by a recognized issuer in order
 for the Alexa skill to be able to connect to it.  Currently these files must be in the
 same file as which `index.js` is located.  These two files must be present:
 
-* `key.pm` - private key associated with the certificate
-* `cert.pem` - the certificate.
+* `key.pm` - private key associated with the certificate (privkey.pem from let's encrypt)
+* `cert.pem` - certificate (fullchain.pem from let's encrypt)
 
 I use [Let's Encrypt](https://letsencrypt.org/) to generate a free certificate.
 
