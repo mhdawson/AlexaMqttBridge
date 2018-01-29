@@ -23,18 +23,26 @@ if (config.mqtt.serverUrl.indexOf('mqtts') > -1) {
                   ca: fs.readFileSync(path.join(__dirname, 'mqttclient', '/ca.cert')),
                   checkServerIdentity: function() { return undefined }
   }
+} else if (config.mqtt.username) {
+  mqttOptions = { username: config.mqtt.username,
+                  password: config.mqtt.password
+                }
 }
 const mqttClient = mqtt.connect(config.mqtt.serverUrl, mqttOptions);
 
-var mqttOptionsExternal;
-if (config.mqttExternal.serverUrl.indexOf('mqtts') > -1) {
-  mqttOptionsExternal = { key: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.key')),
-                          cert: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.cert')),
-                          ca: fs.readFileSync(path.join(__dirname, 'mqttclient', '/ca.cert')),
-                          checkServerIdentity: function() { return undefined }
+var mqttClientExternal;
+
+if (config.mqttExternal) {
+  var mqttOptionsExternal;
+  if (config.mqttExternal.serverUrl.indexOf('mqtts') > -1) {
+    mqttOptionsExternal = { key: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.key')),
+                            cert: fs.readFileSync(path.join(__dirname, 'mqttclient', '/client.cert')),
+                            ca: fs.readFileSync(path.join(__dirname, 'mqttclient', '/ca.cert')),
+                            checkServerIdentity: function() { return undefined }
+    }
   }
+  mqttClientExternal = mqtt.connect(config.mqttExternal.serverUrl, mqttOptionsExternal);
 }
-const mqttClientExternal = mqtt.connect(config.mqttExternal.serverUrl, mqttOptionsExternal);
 
 
 mqttClient.on('connect',function() {
