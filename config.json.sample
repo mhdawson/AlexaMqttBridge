@@ -2,6 +2,7 @@
   "logging": false,
   "port": 5000,
   "terminateSessionDefault": true,
+  "nossl": true,
   "url": "/alexa?XXXXXXXXXXXXXXXXXX",
   "intents": { "TurnOn": { "power monitor": { "topic": "alexa", "message": "received ${slots.Device.value} on" },
                            "alarm": { "topic": "house/alarm/control", "message": "arm" },
