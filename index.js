@@ -203,12 +203,15 @@ const requestHandler = (request, response) => {
 }
 
 // start the server
-const ssl_options = {
-  key: fs.readFileSync(path.join(__dirname, 'key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+let options = new Object();
+if (!config.nossl) {
+    const options = {
+      key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+      cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+    }
 }
 
-const server = http.createServer(ssl_options, requestHandler)
+const server = http.createServer(options, requestHandler)
 server.listen(config.port, (err) => {
   if (err) {
     return console.log('Could not start server', err);
