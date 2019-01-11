@@ -251,6 +251,9 @@ The bridge configuration includes the following main fields:
   ```
   alexa?auvy612312wdxcfr21123
   ```
+* **nossl** - If true, allows the bridge to run without SSL/TLS encryption.
+  This is useful in case the bridge is placed behind a reverse proxy capable of 
+  performing SSL encryption.
 * **mqttServerUrl** - url of the mqtt server to connect to.  This can
   either start with tcp:// or mqtts://. If it starts with mqtts://
   there must be a subdirectory in the lib directory called mqttclient
