@@ -205,7 +205,7 @@ const requestHandler = (request, response) => {
 // start the server
 let options = new Object();
 if (!config.nossl) {
-    const options = {
+    options = {
       key: fs.readFileSync(path.join(__dirname, 'key.pem')),
       cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
     }
